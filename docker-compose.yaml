@@ -1,0 +1,10 @@
+# Example services definition
+version: "3.5"
+
+services:
+  babelpod:
+    image: stackptr/babelpod:latest
+    container_name: babelpod
+    ports:
+      - 3000:3000
+    privileged: true # Required to read /proc/asound/pcm
