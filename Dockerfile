@@ -8,7 +8,8 @@ RUN apt-get update -y && \
       libsndfile1-dev \
       ca-certificates \
       curl \
-      git
+      git \
+      python-is-python2
 
 ARG NODE_VERSION=v9.8.0
 ARG TARGETPLATFORM
