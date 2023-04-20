@@ -10,7 +10,7 @@ RUN apt-get update -y && \
       curl
 
 RUN curl -fsSL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs npm
 
 WORKDIR /usr/src/app
 
