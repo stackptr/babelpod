@@ -1,24 +1,30 @@
-const parseDevices = (pcmDevicesString) => {
-  var pcmDevicesArray = pcmDevicesString
-    .split("\n")
-    .filter((line) => line != "");
-  var pcmDevices = pcmDevicesArray.map((device) => {
-    var splitDev = device.split(":");
-    return {
-      id:
-        "plughw:" +
-        splitDev[0]
-          .split("-")
-          .map((num) => parseInt(num, 10))
-          .join(","),
-      name: splitDev[2].trim(),
-      output: splitDev.some((part) => part.includes("playback")),
-      input: splitDev.some((part) => part.includes("capture")),
-    };
-  });
+var uniqBy = require('lodash/uniqBy')
 
-  outputs = pcmDevices.filter((dev) => dev.output);
-  inputs = pcmDevices.filter((dev) => dev.input);
+// Match on card number and name
+const matcher = /(\d):.*\[(.*)\]/
+
+const parse = (rawStr) => 
+  rawStr.split("\n").filter((line) => line != "").map((device) => {
+    const [_, id, name] = device.match(matcher)
+    return {
+      id: `plughw:${id},0`,
+      name
+    }
+  })
+
+
+const parseDevices = (outputsStr, inputsStr) => {
+  const parsed = parse(`${outputsStr}\n${inputsStr}`).map(device => ({
+    ...device,
+    output: outputsStr.includes(device.name),
+    input: inputsStr.includes(device.name)
+  }))
+  
+  // Devices may appear twice
+  const devices = uniqBy(parsed, device => device.id)
+  
+  const outputs = devices.filter(dev => dev.output);
+  const inputs = devices.filter((dev) => dev.input)
   
   return {outputs, inputs}
 };

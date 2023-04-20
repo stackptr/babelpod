@@ -6,7 +6,7 @@ var util = require('util');
 var stream = require('stream');
 var mdns = require('mdns-js');
 var blue = require('bluetoothctl');
-var fs = require('fs');
+var execSync = require('child_process').execSync;
 var AirTunes = require('airtunes2');
 
 var {parseDevices} = require('./pcm')
@@ -48,12 +48,13 @@ var availablePcmInputs = [];
 // Search for new PCM input/output devices
 function pcmDeviceSearch(){
   try {
-    var pcmDevicesString = fs.readFileSync('/proc/asound/pcm', 'utf8');
+    var pcmOutputs = execSync('aplay --list-devices | grep card')
+    var pcmInputs = execSync('arecord --list-devices | grep card')
   } catch (e) {
     console.log("audio input/output pcm devices could not be found");
     return;
   }
-  const pcmDevices = parseDevices(pcmDevicesString)
+  const pcmDevices = parseDevices(pcmOutputs, pcmInputs)
   availablePcmOutputs = pcmDevices.outputs
   availablePcmInputs = pcmDevices.inputs
   updateAllInputs();

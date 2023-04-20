@@ -1,12 +1,14 @@
 var {parseDevices} = require('./../app/pcm')
 
-const mockPcmDevicesString = `00-00: bcm2835 Headphones : bcm2835 Headphones : playback 8
-01-00: MAI PCM i2s-hifi-0 : MAI PCM i2s-hifi-0 : playback 1
-02-00: USB Audio : USB Audio : playback 1 : capture 1`
+const mockPcmOutputs = `card 0: Headphones [bcm2835 Headphones], device 0: bcm2835 Headphones [bcm2835 Headphones]
+card 1: vc4hdmi [vc4-hdmi], device 0: MAI PCM i2s-hifi-0 [MAI PCM i2s-hifi-0]
+card 2: CODEC [USB Audio CODEC], device 0: USB Audio [USB Audio]`
+
+const mockPcmInputs = `card 2: CODEC [USB Audio CODEC], device 0: USB Audio [USB Audio]`
 
 describe('parseDevices', () => {
   it('returns inputs and outputs', () => {
-    const result = parseDevices(mockPcmDevicesString)
+    const result = parseDevices(mockPcmOutputs, mockPcmInputs)
     expect(result).toEqual({
       outputs: [
         {
