@@ -1,5 +1,14 @@
 FROM node:9.8
 
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update -y && \
+  apt-get install -y --no-install-recommends \
+      alsa-base \
+      alsa-utils \
+      libsndfile1-dev && \
+  apt-get clean
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
