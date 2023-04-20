@@ -7,4 +7,5 @@ services:
     container_name: babelpod
     ports:
       - 3000:3000
-    privileged: true # Required to read /proc/asound/pcm
+    devices:
+      - /dev/snd
