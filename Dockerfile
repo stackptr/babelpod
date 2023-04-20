@@ -7,7 +7,8 @@ RUN apt-get update -y && \
       alsa-utils \
       libsndfile1-dev \
       ca-certificates \
-      curl
+      curl \
+      git
 
 ARG NODE_VERSION=v9.8.0
 ARG TARGETPLATFORM
