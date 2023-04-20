@@ -2,11 +2,20 @@
   "name": "babelpod",
   "version": "0.0.1",
   "description": "Add line-in and Bluetooth input to the HomePod (or other AirPlay speakers). Intended to run on Raspberry Pi.",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "airtunes2": "stackptr/node_airtunes2",
     "bluetoothctl": "^1.1.0",
     "express": "^4.17.1",
     "mdns-js": "^1.0.3",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "jest": "^22.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

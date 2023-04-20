@@ -9,6 +9,8 @@ var blue = require('bluetoothctl');
 var fs = require('fs');
 var AirTunes = require('airtunes2');
 
+var {parseDevices} = require('./pcm')
+
 var airtunes = new AirTunes();
 
 // Create ToVoid and FromVoid streams so we always have somewhere to send to and from.
@@ -51,10 +53,9 @@ function pcmDeviceSearch(){
     console.log("audio input/output pcm devices could not be found");
     return;
   }
-  var pcmDevicesArray = pcmDevicesString.split("\n").filter(line => line!="");
-  var pcmDevices = pcmDevicesArray.map(device => {var splitDev = device.split(":");return {id: "plughw:"+splitDev[0].split("-").map(num => parseInt(num, 10)).join(","), name:splitDev[2].trim(), output: splitDev.some(part => part.includes("playback")), input: splitDev.some(part => part.includes("capture"))}});
-  availablePcmOutputs = pcmDevices.filter(dev => dev.output);
-  availablePcmInputs = pcmDevices.filter(dev => dev.input);
+  const pcmDevices = parseDevices(pcmDevicesString)
+  availablePcmOutputs = pcmDevices.outputs
+  availablePcmInputs = pcmDevices.inputs
   updateAllInputs();
   updateAllOutputs();
 }
