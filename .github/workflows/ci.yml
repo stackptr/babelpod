@@ -3,12 +3,20 @@ name: CI
 on:
   push:
     branches: [main]
+  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: stackptr/babelpod
+          tags: |
+            type=ref,event=branch
+            type=raw,value=latest,enable={{is_default_branch}}
       - uses: docker/setup-qemu-action@v2
       - uses: docker/setup-buildx-action@v2
       - uses: docker/login-action@v2
@@ -18,6 +26,7 @@ jobs:
       - uses: docker/build-push-action@v4
         with:
           push: true
-          tags: stackptr/babelpod:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm
