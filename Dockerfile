@@ -32,6 +32,8 @@ RUN mkdir -p /root/node/.npm-global
 ENV PATH=/root/node/.npm-global/bin:$PATH
 ENV NPM_CONFIG_PREFIX=/root/node/.npm-global
 
+RUN npm install npm -g
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
