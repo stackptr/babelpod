@@ -9,7 +9,8 @@ RUN apt-get update -y && \
       ca-certificates \
       curl \
       git \
-      python-is-python2
+      python-is-python2 \
+      build-essential
 
 ARG NODE_VERSION=v9.8.0
 ARG TARGETPLATFORM
