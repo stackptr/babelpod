@@ -27,6 +27,10 @@ ENV NODE_HOME=/opt/node
 ENV NODE_PATH /opt/node/lib/node_modules
 ENV PATH /opt/node/bin:$PATH
 
+RUN mkdir -p /root/node/.npm-global
+ENV PATH=/root/node/.npm-global/bin:$PATH
+ENV NPM_CONFIG_PREFIX=/root/node/.npm-global
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
