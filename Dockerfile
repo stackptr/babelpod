@@ -1,19 +1,6 @@
-FROM debian:11 AS base
+FROM buildpack-deps:bullseye AS base
 
 ENV DEBIAN_FRONTEND noninteractive
-
-RUN apt-get update -y && \
-  apt-get install -y --no-install-recommends \
-      alsa-utils \
-      libsndfile1-dev \
-      ca-certificates \
-      curl \
-      git \
-      python-is-python2
-
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-      autoconf automake bzip2 dpkg-dev file g++ gcc imagemagick libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev libevent-dev libffi-dev libgdbm-dev libgeoip-dev libglib2.0-dev libjpeg-dev libkrb5-dev liblzma-dev libmagickcore-dev libmagickwand-dev libncurses5-dev libncursesw5-dev libpng-dev libpq-dev libreadline-dev libsqlite3-dev libssl-dev libtool libwebp-dev libxml2-dev libxslt-dev libyaml-dev make patch xz-utils zlib1g-dev
 
 RUN groupadd --gid 1000 node && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
 
@@ -30,17 +17,29 @@ RUN case ${TARGETPLATFORM} in \
  | tar -xz -C /usr/local --strip-components=1  --no-same-owner \
  && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
-USER node
+FROM node:9.8 AS builder
 
-FROM base
-
-WORKDIR app
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-# RUN npm install
+RUN npm install
 
 COPY app .
+
+FROM base
+
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app .
+
+RUN apt-get update -y && \
+  apt-get install -y --no-install-recommends \
+      alsa-utils \
+      libsndfile1-dev \
+      python-is-python2
+
+USER node
 
 EXPOSE 3000
 CMD [ "node", "index.js" ]
