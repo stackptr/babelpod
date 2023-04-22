@@ -34,7 +34,7 @@ USER node
 
 FROM base
 
-WORKDIR /usr/src/app
+WORKDIR app
 
 COPY package*.json ./
 
