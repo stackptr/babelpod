@@ -6,12 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
-          - linux/arm
     steps:
       - uses: actions/checkout@v3
       - id: meta
@@ -33,5 +27,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           context: .
-          platforms: ${{ matrix.platform }}
-
+          platforms: linux/amd64,linux/arm64,linux/arm
