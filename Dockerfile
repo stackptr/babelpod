@@ -39,6 +39,8 @@ RUN apt-get update -y && \
       libsndfile1-dev \
       python-is-python2
 
+RUN usermod -a -G audio node
+
 USER node
 
 EXPOSE 3000
